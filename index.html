@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colombia - Descubre su Belleza</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .submenu, .social-submenu {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .submenu.active, .social-submenu.active {
+            display: block;
+        }
+
+        .submenu li, .social-submenu li {
+            display: block;
+            width: 100%;
+        }
+
+        .submenu a, .social-submenu a {
+            padding: 0.8rem 1rem;
+        }
+
+        .submenu a:hover, .social-submenu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .social-submenu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-submenu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-arrow {
+            cursor: pointer;
+            padding: 0 0.5rem;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .dropdown-arrow:focus {
+            outline: 2px solid var(--primary-color, #007bff);
+        }
+        .has-submenu {
+            position: relative;
+        }
+        .has-submenu .submenu,
+        .has-submenu .social-submenu {
+            left: 0;
+            top: 100%;
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto 2rem auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .slider-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .slider-btn.prev { left: 10px; }
+        .slider-btn.next { right: 10px; }
+        .slider-btn:hover { background: rgba(0,0,0,0.7); }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header" role="banner">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo Colombia Turismo">
+        </div>
+        <nav class="nav-menu" role="navigation" aria-label="Menú principal">
+            <ul>
+                <li>
+                    <a href="index.html">Inicio</a>
+                </li>
+                <li class="has-submenu">
+                    <a href="rutas.html">Rutas</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/rutas/costa">Costa Caribe</a></li>
+                        <li><a href="/rutas/andina">Región Andina</a></li>
+                        <li><a href="/rutas/amazonia">Amazonía</a></li>
+                        <li><a href="/rutas/pacifico">Pacífico</a></li>
+                        <li><a href="/rutas/orinoquia">Orinoquía</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="actividades.html">Actividades</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/actividades/aventura">Aventura</a></li>
+                        <li><a href="/actividades/cultural">Cultural</a></li>
+                        <li><a href="/actividades/gastronomia">Gastronomía</a></li>
+                        <li><a href="/actividades/naturaleza">Naturaleza</a></li>
+                        <li><a href="/actividades/playas">Playas</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="contacto.html">Contacto</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="social-submenu">
+                        <li><a href="https://wa.me/573123456789" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                        <li><a href="https://instagram.com/colombiatravel" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://facebook.com/colombiatravel" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div id="mensaje-bienvenida"></div>
+    <!-- Mensaje flotante de bienvenida -->
+    <div id="mensaje-bienvenida-flotante"></div>
+    <main>
+        <!-- Banner Principal -->
+        <section class="banner" aria-label="Banner principal">
+            <div class="banner-content">
+                <h1>Descubre la Belleza de Colombia</h1>
+                <p>Un país lleno de magia, cultura y aventura te espera</p>
+            </div>
+        </section>
+
+        <!-- Destinos Populares -->
+        <section class="destinos" aria-labelledby="destinos-titulo">
+            <h2 id="destinos-titulo">Destinos Populares</h2>
+            <div class="slider">
+                <button class="slider-btn prev">&#10094;</button>
+                <img class="slider-img" src="images/destinos/Cartagena.jpg" alt="Cartagena">
+                <button class="slider-btn next">&#10095;</button>
+            </div>
+            <div class="destinos-grid">
+                <div class="destino-card">
+                    <img src="images/destinos/Cartagena.jpg" alt="Vista panorámica de Cartagena, ciudad amurallada, patrimonio de la humanidad">
+                    <h3>Cartagena</h3>
+                    <p>La ciudad amurallada, patrimonio de la humanidad.</p>
+                </div>
+                <div class="destino-card">
+                    <img src="images/destinos/Valle del Cocora.jpg" alt="Paisaje del Valle de Cocora, hogar de las palmas de cera más altas del mundo">
+                    <h3>Valle de Cocora</h3>
+                    <p>Hogar de las palmas de cera más altas del mundo.</p>
+                </div>
+                <div class="destino-card">
+                    <img src="images/destinos/BURITACA - CIUDAD PERDIDA COLOMBIA.jpg" alt="Vista aérea de Ciudad Perdida, sitio arqueológico de los tayrona">
+                    <h3>Ciudad Perdida</h3>
+                    <p>Teyuna, la ciudad perdida de los tayrona: entre la conservación y la concertación.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actividades Recomendadas -->
+        <section class="actividades" aria-labelledby="actividades-titulo">
+            <h2 id="actividades-titulo">Actividades Recomendadas</h2>
+            <div class="actividades-grid">
+                <div class="actividad-card">
+                    <img src="images/actividades/Senderismo.jpg" alt="Senderismo en la Sierra Nevada de Santa Marta">
+                    <h3>Senderismo</h3>
+                    <p>Explora los senderos de la Sierra Nevada.</p>
+                </div>
+                <div class="actividad-card">
+                    <img src="images/actividades/Buceo.jpg" alt="Buceo en arrecifes del Caribe colombiano">
+                    <h3>Buceo</h3>
+                    <p>Descubre los arrecifes del Caribe.</p>
+                </div>
+                <div class="actividad-card">
+                    <img src="images/actividades/Carnaval.jpg" alt="Carnaval de Barranquilla, la fiesta más grande de Colombia">
+                    <h3>Carnaval</h3>
+                    <p>Vive la fiesta más grande de Colombia.</p>
+                </div>
+                <div class="actividad-card">
+                    <img src="images/actividades/Gastronomia.jpg" alt="Plato típico colombiano representando la gastronomía local">
+                    <h3>Gastronomía</h3>
+                    <p>Prueba los sabores auténticos de Colombia.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section class="testimonios" aria-labelledby="testimonios-titulo">
+            <h2 id="testimonios-titulo">Experiencias de Viajeros</h2>
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <img src="images/testimonios/Testimonio1.jpg" alt="María González, viajera en Cartagena">
+                    <p>"Una experiencia inolvidable en Cartagena."</p>
+                    <h4>María González</h4>
+                </div>
+                <div class="testimonio-card">
+                    <img src="images/testimonios/testimonio2.jpg" alt="Juan Pérez, trekking en Ciudad Perdida">
+                    <p>"El trekking a la Ciudad Perdida fue increíble."</p>
+                    <h4>Juan Pérez</h4>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@colombiatravel.com</p>
+                <p>Tel: +57 123 456 7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook" aria-label="Facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram" aria-label="Instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter" aria-label="Twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Colombia Travel. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const arrows = document.querySelectorAll('.dropdown-arrow');
+            const menus = document.querySelectorAll('.submenu, .social-submenu');
+
+            arrows.forEach(arrow => {
+                arrow.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Cierra todos los menús primero
+                    menus.forEach(menu => menu.classList.remove('active'));
+                    // Abre solo el menú correspondiente
+                    const menu = arrow.nextElementSibling;
+                    if (menu && !menu.classList.contains('active')) {
+                        menu.classList.add('active');
+                    }
+                    e.stopPropagation();
+                });
+                // Accesibilidad: permite abrir con Enter
+                arrow.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        arrow.click();
+                    }
+                });
+            });
+
+            // Cierra los menús si se hace clic fuera
+            document.addEventListener('click', function () {
+                menus.forEach(menu => menu.classList.remove('active'));
+            });
+        });
+
+        // Slider de imágenes para destinos
+        const imagenesSlider = [
+            'images/destinos/Cartagena.jpg',
+            'images/destinos/Valle del Cocora.jpg',
+            'images/destinos/BURITACA - CIUDAD PERDIDA COLOMBIA.jpg'
+        ];
+        let indiceSlider = 0;
+        const sliderImg = document.querySelector('.slider-img');
+        const btnPrev = document.querySelector('.slider-btn.prev');
+        const btnNext = document.querySelector('.slider-btn.next');
+
+        function mostrarImagenSlider(indice) {
+            sliderImg.src = imagenesSlider[indice];
+        }
+        function siguienteImagenSlider() {
+            indiceSlider = (indiceSlider + 1) % imagenesSlider.length;
+            mostrarImagenSlider(indiceSlider);
+        }
+        function anteriorImagenSlider() {
+            indiceSlider = (indiceSlider - 1 + imagenesSlider.length) % imagenesSlider.length;
+            mostrarImagenSlider(indiceSlider);
+        }
+        let intervaloSlider = setInterval(siguienteImagenSlider, 3000);
+        btnNext.addEventListener('click', () => {
+            siguienteImagenSlider();
+            reiniciarIntervaloSlider();
+        });
+        btnPrev.addEventListener('click', () => {
+            anteriorImagenSlider();
+            reiniciarIntervaloSlider();
+        });
+        function reiniciarIntervaloSlider() {
+            clearInterval(intervaloSlider);
+            intervaloSlider = setInterval(siguienteImagenSlider, 3000);
+        }
+        mostrarImagenSlider(indiceSlider);
+    </script>
+    <script>
+    function obtenerSaludoPorHora(idioma) {
+        const hora = new Date().getHours();
+        let saludo = "";
+        let mensaje = "";
+
+        if (idioma.startsWith('es')) {
+            if (hora >= 6 && hora < 12) saludo = "¡Buenos días!";
+            else if (hora >= 12 && hora < 18) saludo = "¡Buenas tardes!";
+            else saludo = "¡Buenas noches!";
+            mensaje = "Bienvenido a Turismo Colombiano, esperamos ofrecerte el mejor servicio.";
+        } else if (idioma.startsWith('en')) {
+            if (hora >= 6 && hora < 12) saludo = "Good morning!";
+            else if (hora >= 12 && hora < 18) saludo = "Good afternoon!";
+            else saludo = "Good evening!";
+            mensaje = "Welcome to Colombian Tourism, we hope to offer you the best service.";
+        } else if (idioma.startsWith('fr')) {
+            if (hora >= 6 && hora < 12) saludo = "Bonjour !";
+            else if (hora >= 12 && hora < 18) saludo = "Bon après-midi !";
+            else saludo = "Bonsoir !";
+            mensaje = "Bienvenue au Tourisme Colombien, nous espérons vous offrir le meilleur service.";
+        } else {
+            if (hora >= 6 && hora < 12) saludo = "¡Buenos días!";
+            else if (hora >= 12 && hora < 18) saludo = "¡Buenas tardes!";
+            else saludo = "¡Buenas noches!";
+            mensaje = "Bienvenido a Turismo Colombiano, esperamos ofrecerte el mejor servicio.";
+        }
+        return saludo + ' ' + mensaje;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const idioma = navigator.language || navigator.userLanguage;
+        const saludo = obtenerSaludoPorHora(idioma);
+        const mensajeDiv = document.getElementById('mensaje-bienvenida');
+        if (mensajeDiv) {
+            mensajeDiv.textContent = saludo;
+            mensajeDiv.style.fontSize = '1.5rem';
+            mensajeDiv.style.textAlign = 'center';
+            mensajeDiv.style.margin = '1rem 0';
+            mensajeDiv.style.fontWeight = 'bold';
+        }
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mensaje = "Hola, bienvenido a turismo colombiano, esperamos ayudarte con todo lo que necesites en tu viaje";
+        const mensajeDiv = document.getElementById('mensaje-bienvenida-flotante');
+        if (mensajeDiv) {
+            mensajeDiv.textContent = mensaje;
+            mensajeDiv.style.position = 'fixed';
+            mensajeDiv.style.bottom = '30px';
+            mensajeDiv.style.right = '30px';
+            mensajeDiv.style.background = 'linear-gradient(to bottom, #ffe600 33%, #2041a2 33%, #2041a2 66%, #e9151c 66%)';
+            mensajeDiv.style.color = 'white';
+            mensajeDiv.style.padding = '1rem 2rem';
+            mensajeDiv.style.borderRadius = '20px';
+            mensajeDiv.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+            mensajeDiv.style.fontSize = '1.3rem';
+            mensajeDiv.style.fontWeight = 'bold';
+            mensajeDiv.style.zIndex = '9999';
+            mensajeDiv.style.transition = 'opacity 0.5s';
+            setTimeout(function() {
+                mensajeDiv.style.opacity = '0';
+                setTimeout(function() {
+                    mensajeDiv.remove();
+                }, 500);
+            }, 5000);
+        }
+    });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

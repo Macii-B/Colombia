@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Colombia</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        .contacto-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 5rem 5%;
+        }
+        
+        .formulario-contacto {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .btn-enviar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-enviar:hover {
+            background-color: #ff5252;
+        }
+        
+        .info-contacto {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            width: 30px;
+        }
+        
+        #mapa-contacto {
+            height: 300px;
+            margin-top: 2rem;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .contacto-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .nav-menu li:hover .submenu {
+            display: block;
+        }
+
+        .submenu li {
+            display: block;
+            width: 100%;
+        }
+
+        .submenu a {
+            padding: 0.8rem 1rem;
+        }
+
+        .submenu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .social-submenu {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .nav-menu li:hover .social-submenu {
+            display: block;
+        }
+
+        .social-submenu li {
+            display: block;
+            width: 100%;
+        }
+
+        .social-submenu a {
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-submenu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .social-submenu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .dropdown-arrow {
+            cursor: pointer;
+            padding: 0 0.5rem;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .dropdown-arrow:focus {
+            outline: 2px solid var(--primary-color, #007bff);
+        }
+        .has-submenu {
+            position: relative;
+        }
+        .has-submenu .submenu,
+        .has-submenu .social-submenu {
+            left: 0;
+            top: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo Colombia Turismo">
+        </div>
+        <nav class="nav-menu" role="navigation" aria-label="Menú principal">
+            <ul>
+                <li>
+                    <a href="index.html">Inicio</a>
+                </li>
+                <li class="has-submenu">
+                    <a href="rutas.html">Rutas</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/rutas/costa">Costa Caribe</a></li>
+                        <li><a href="/rutas/andina">Región Andina</a></li>
+                        <li><a href="/rutas/amazonia">Amazonía</a></li>
+                        <li><a href="/rutas/pacifico">Pacífico</a></li>
+                        <li><a href="/rutas/orinoquia">Orinoquía</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="actividades.html">Actividades</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/actividades/aventura">Aventura</a></li>
+                        <li><a href="/actividades/cultural">Cultural</a></li>
+                        <li><a href="/actividades/gastronomia">Gastronomía</a></li>
+                        <li><a href="/actividades/naturaleza">Naturaleza</a></li>
+                        <li><a href="/actividades/playas">Playas</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="contacto.html">Contacto</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="social-submenu">
+                        <li><a href="https://wa.me/573123456789" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                        <li><a href="https://instagram.com/colombiatravel" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://facebook.com/colombiatravel" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="contacto-container" aria-labelledby="contacto-titulo">
+            <h2 id="contacto-titulo">Contáctanos</h2>
+            <section class="formulario-contacto" aria-label="Formulario de contacto">
+                <form id="contacto-form">
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">Enviar mensaje</button>
+                </form>
+            </section>
+            <section class="info-contacto" aria-label="Información de contacto">
+                <h2>Información de Contacto</h2>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt" aria-label="Dirección"></i>
+                    <div>
+                        <h3>Dirección</h3>
+                        <p>Calle 123 #45-67, Bogotá, Colombia</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone" aria-label="Teléfono"></i>
+                    <div>
+                        <h3>Teléfono</h3>
+                        <p>+57 123 456 7890</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope" aria-label="Email"></i>
+                    <div>
+                        <h3>Email</h3>
+                        <p>info@colombiatravel.com</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock" aria-label="Horario de atención"></i>
+                    <div>
+                        <h3>Horario de Atención</h3>
+                        <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+                        <p>Sábados: 10:00 AM - 2:00 PM</p>
+                    </div>
+                </div>
+                <div id="mapa-contacto" aria-label="Mapa de ubicación"></div>
+            </section>
+        </section>
+    </main>
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@colombiatravel.com</p>
+                <p>Tel: +57 123 456 7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook" aria-label="Facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram" aria-label="Instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter" aria-label="Twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Colombia Travel. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Inicializar mapa
+        var mapa = L.map('mapa-contacto').setView([4.5709, -74.2973], 15);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+        
+        // Añadir marcador
+        L.marker([4.5709, -74.2973])
+            .bindPopup('Colombia Travel - Oficina Principal')
+            .addTo(mapa);
+
+        // Manejar envío del formulario
+        document.getElementById('contacto-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Aquí se puede agregar la lógica para enviar el formulario
+            alert('Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.');
+            this.reset();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const arrows = document.querySelectorAll('.dropdown-arrow');
+            const menus = document.querySelectorAll('.submenu, .social-submenu');
+
+            arrows.forEach(arrow => {
+                arrow.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Cierra todos los menús primero
+                    menus.forEach(menu => menu.classList.remove('active'));
+                    // Abre solo el menú correspondiente
+                    const menu = arrow.nextElementSibling;
+                    if (menu && !menu.classList.contains('active')) {
+                        menu.classList.add('active');
+                    }
+                    e.stopPropagation();
+                });
+                // Accesibilidad: permite abrir con Enter
+                arrow.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        arrow.click();
+                    }
+                });
+            });
+
+            // Cierra los menús si se hace clic fuera
+            document.addEventListener('click', function () {
+                menus.forEach(menu => menu.classList.remove('active'));
+            });
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

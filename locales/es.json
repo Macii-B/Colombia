@@ -1,0 +1,50 @@
+{
+    "nav": {
+        "inicio": "Inicio",
+        "actividades": "Actividades",
+        "rutas": "Rutas",
+        "contacto": "Contacto"
+    },
+    "home": {
+        "titulo": "Descubre Colombia",
+        "subtitulo": "Un país lleno de magia y diversidad",
+        "destinos": {
+            "titulo": "Destinos Populares",
+            "verMas": "Ver más"
+        }
+    },
+    "actividades": {
+        "titulo": "Actividades en Colombia",
+        "categorias": {
+            "todas": "Todas",
+            "naturaleza": "Naturaleza",
+            "aventura": "Aventura",
+            "cultura": "Cultura",
+            "gastronomia": "Gastronomía"
+        }
+    },
+    "rutas": {
+        "titulo": "Rutas Turísticas",
+        "regiones": {
+            "caribe": "Costa Caribe",
+            "andina": "Región Andina",
+            "amazonia": "Amazonía",
+            "pacifico": "Pacífico",
+            "orinoquia": "Orinoquía"
+        }
+    },
+    "contacto": {
+        "titulo": "Contacto",
+        "formulario": {
+            "nombre": "Nombre",
+            "email": "Correo electrónico",
+            "mensaje": "Mensaje",
+            "enviar": "Enviar"
+        }
+    },
+    "footer": {
+        "contacto": "Contacto",
+        "seguir": "Síguenos",
+        "derechos": "Todos los derechos reservados"
+    }
+} 

@@ -1,0 +1,50 @@
+{
+    "nav": {
+        "inicio": "Home",
+        "actividades": "Activities",
+        "rutas": "Routes",
+        "contacto": "Contact"
+    },
+    "home": {
+        "titulo": "Discover Colombia",
+        "subtitulo": "A country full of magic and diversity",
+        "destinos": {
+            "titulo": "Popular Destinations",
+            "verMas": "See more"
+        }
+    },
+    "actividades": {
+        "titulo": "Activities in Colombia",
+        "categorias": {
+            "todas": "All",
+            "naturaleza": "Nature",
+            "aventura": "Adventure",
+            "cultura": "Culture",
+            "gastronomia": "Gastronomy"
+        }
+    },
+    "rutas": {
+        "titulo": "Tourist Routes",
+        "regiones": {
+            "caribe": "Caribbean Coast",
+            "andina": "Andean Region",
+            "amazonia": "Amazon",
+            "pacifico": "Pacific",
+            "orinoquia": "Orinoquia"
+        }
+    },
+    "contacto": {
+        "titulo": "Contact",
+        "formulario": {
+            "nombre": "Name",
+            "email": "Email",
+            "mensaje": "Message",
+            "enviar": "Send"
+        }
+    },
+    "footer": {
+        "contacto": "Contact",
+        "seguir": "Follow us",
+        "derechos": "All rights reserved"
+    }
+} 

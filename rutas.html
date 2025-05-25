@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutas Turísticas - Colombia</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #mapa {
+            height: 500px;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+        .ruta-card {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .ruta-card img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+        .ruta-info {
+            padding: 1.5rem;
+            flex: 1;
+        }
+        .ruta-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .btn-explorar {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-explorar:hover {
+            background-color: #ff5252;
+        }
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .submenu, .social-submenu {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .submenu.active, .social-submenu.active {
+            display: block;
+        }
+
+        .submenu li, .social-submenu li {
+            display: block;
+            width: 100%;
+        }
+
+        .submenu a, .social-submenu a {
+            padding: 0.8rem 1rem;
+        }
+
+        .submenu a:hover, .social-submenu a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .social-submenu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-submenu a i {
+            width: 20px;
+            text-align: center;
+        }
+        .dropdown-arrow {
+            cursor: pointer;
+            padding: 0 0.5rem;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .dropdown-arrow:focus {
+            outline: 2px solid var(--primary-color, #007bff);
+        }
+        .has-submenu {
+            position: relative;
+        }
+        .has-submenu .submenu,
+        .has-submenu .social-submenu {
+            left: 0;
+            top: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo Colombia Turismo">
+        </div>
+        <nav class="nav-menu" role="navigation" aria-label="Menú principal">
+            <ul>
+                <li>
+                    <a href="index.html">Inicio</a>
+                </li>
+                <li class="has-submenu">
+                    <a href="rutas.html">Rutas</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/rutas/costa">Costa Caribe</a></li>
+                        <li><a href="/rutas/andina">Región Andina</a></li>
+                        <li><a href="/rutas/amazonia">Amazonía</a></li>
+                        <li><a href="/rutas/pacifico">Pacífico</a></li>
+                        <li><a href="/rutas/orinoquia">Orinoquía</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="actividades.html">Actividades</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="submenu">
+                        <li><a href="/actividades/aventura">Aventura</a></li>
+                        <li><a href="/actividades/cultural">Cultural</a></li>
+                        <li><a href="/actividades/gastronomia">Gastronomía</a></li>
+                        <li><a href="/actividades/naturaleza">Naturaleza</a></li>
+                        <li><a href="/actividades/playas">Playas</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="contacto.html">Contacto</a>
+                    <span class="dropdown-arrow" tabindex="0">&#9660;</span>
+                    <ul class="social-submenu">
+                        <li><a href="https://wa.me/573123456789" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                        <li><a href="https://instagram.com/colombiatravel" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://facebook.com/colombiatravel" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="mapa-section" aria-label="Mapa de rutas turísticas">
+            <h2>Rutas Turísticas de Colombia</h2>
+            <div id="mapa"></div>
+        </section>
+        <section class="rutas-section" aria-labelledby="rutas-titulo">
+            <h2 id="rutas-titulo">Destinos Destacados</h2>
+            <div class="ruta-card">
+                <img src="images/caribe.jpg" alt="Playa del Caribe colombiano, Ruta Caribe">
+                <div class="ruta-info">
+                    <h3>Ruta Caribe</h3>
+                    <p>Descubre las playas más hermosas del Caribe colombiano, desde Cartagena hasta Santa Marta. Explora la cultura afrocaribeña, disfruta de la gastronomía local y sumérgete en las aguas cristalinas del mar Caribe.</p>
+                    <a href="#" class="btn-explorar">Explorar Ruta</a>
+                </div>
+            </div>
+            <div class="ruta-card">
+                <img src="images/cafetera.jpg" alt="Paisaje cafetero de Colombia, Ruta Cafetera">
+                <div class="ruta-info">
+                    <h3>Ruta Cafetera</h3>
+                    <p>Recorre el Eje Cafetero, declarado Patrimonio de la Humanidad por la UNESCO. Visita fincas cafeteras, disfruta del paisaje cultural cafetero y conoce el proceso de producción del mejor café del mundo.</p>
+                    <a href="#" class="btn-explorar">Explorar Ruta</a>
+                </div>
+            </div>
+            <div class="ruta-card">
+                <img src="images/amazonas.jpg" alt="Selva amazónica de Colombia, Ruta Amazonas">
+                <div class="ruta-info">
+                    <h3>Ruta Amazonas</h3>
+                    <p>Adéntrate en el pulmón del mundo. Explora la selva amazónica, conoce comunidades indígenas y descubre la biodiversidad más rica del planeta.</p>
+                    <a href="#" class="btn-explorar">Explorar Ruta</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@colombiatravel.com</p>
+                <p>Tel: +57 123 456 7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook" aria-label="Facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram" aria-label="Instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter" aria-label="Twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Colombia Travel. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Inicializar el mapa
+        var mapa = L.map('mapa').setView([4.5709, -74.2973], 6);
+
+        // Añadir capa de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // Añadir marcadores para destinos principales
+        var destinos = [
+            {nombre: "Cartagena", lat: 10.3932, lng: -75.4832},
+            {nombre: "Santa Marta", lat: 11.2404, lng: -74.2110},
+            {nombre: "Medellín", lat: 6.2476, lng: -75.5658},
+            {nombre: "Bogotá", lat: 4.5709, lng: -74.2973},
+            {nombre: "Leticia", lat: -4.2153, lng: -69.9405}
+        ];
+
+        destinos.forEach(function(destino) {
+            L.marker([destino.lat, destino.lng])
+                .bindPopup(destino.nombre)
+                .addTo(mapa);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const arrows = document.querySelectorAll('.dropdown-arrow');
+            const menus = document.querySelectorAll('.submenu, .social-submenu');
+
+            arrows.forEach(arrow => {
+                arrow.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Cierra todos los menús primero
+                    menus.forEach(menu => menu.classList.remove('active'));
+                    // Abre solo el menú correspondiente
+                    const menu = arrow.nextElementSibling;
+                    if (menu && !menu.classList.contains('active')) {
+                        menu.classList.add('active');
+                    }
+                    e.stopPropagation();
+                });
+                // Accesibilidad: permite abrir con Enter
+                arrow.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        arrow.click();
+                    }
+                });
+            });
+
+            // Cierra los menús si se hace clic fuera
+            document.addEventListener('click', function () {
+                menus.forEach(menu => menu.classList.remove('active'));
+            });
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

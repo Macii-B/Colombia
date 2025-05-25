@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Destinos - Colombia Turismo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .destinos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .destino-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .destino-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .destino-info {
+            padding: 1rem;
+        }
+
+        .destino-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-edit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo Colombia Turismo">
+        </div>
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="admin.html" class="active">Administración</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <h1>Administración de Destinos</h1>
+        <button class="btn btn-edit" onclick="abrirModal()">Agregar Nuevo Destino</button>
+
+        <div class="destinos-grid" id="destinosGrid">
+            <!-- Los destinos se cargarán dinámicamente aquí -->
+        </div>
+    </main>
+
+    <!-- Modal para crear/editar destino -->
+    <div id="destinoModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Nuevo Destino</h2>
+            <form id="destinoForm">
+                <input type="hidden" id="destinoId">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="region">Región:</label>
+                    <select id="region" required>
+                        <option value="Caribe">Caribe</option>
+                        <option value="Andina">Andina</option>
+                        <option value="Pacífica">Pacífica</option>
+                        <option value="Orinoquía">Orinoquía</option>
+                        <option value="Amazonía">Amazonía</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">URL de la imagen:</label>
+                    <input type="url" id="imagen" required>
+                </div>
+                <div class="form-group">
+                    <label for="clima">Clima:</label>
+                    <input type="text" id="clima" required>
+                </div>
+                <div class="form-group">
+                    <label for="mejorEpoca">Mejor época para visitar:</label>
+                    <input type="text" id="mejorEpoca" required>
+                </div>
+                <div class="form-group">
+                    <label for="actividades">Actividades (separadas por comas):</label>
+                    <input type="text" id="actividades">
+                </div>
+                <div class="destino-actions">
+                    <button type="submit" class="btn btn-edit">Guardar</button>
+                    <button type="button" class="btn btn-delete" onclick="cerrarModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/destinos';
+        let destinos = [];
+
+        // Cargar destinos al iniciar
+        document.addEventListener('DOMContentLoaded', cargarDestinos);
+
+        async function cargarDestinos() {
+            try {
+                const response = await fetch(API_URL);
+                destinos = await response.json();
+                mostrarDestinos();
+            } catch (error) {
+                console.error('Error al cargar destinos:', error);
+                mostrarError('Error al cargar los destinos');
+            }
+        }
+
+        function mostrarDestinos() {
+            const grid = document.getElementById('destinosGrid');
+            grid.innerHTML = destinos.map(destino => `
+                <div class="destino-card">
+                    <img src="${destino.imagen}" alt="${destino.nombre}">
+                    <div class="destino-info">
+                        <h3>${destino.nombre}</h3>
+                        <p>${destino.descripcion.substring(0, 100)}...</p>
+                        <p><strong>Región:</strong> ${destino.region}</p>
+                        <div class="destino-actions">
+                            <button class="btn btn-edit" onclick="editarDestino('${destino._id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-delete" onclick="eliminarDestino('${destino._id}')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function abrirModal(destino = null) {
+            const modal = document.getElementById('destinoModal');
+            const form = document.getElementById('destinoForm');
+            const title = document.getElementById('modalTitle');
+
+            if (destino) {
+                title.textContent = 'Editar Destino';
+                document.getElementById('destinoId').value = destino._id;
+                document.getElementById('nombre').value = destino.nombre;
+                document.getElementById('descripcion').value = destino.descripcion;
+                document.getElementById('region').value = destino.region;
+                document.getElementById('imagen').value = destino.imagen;
+                document.getElementById('clima').value = destino.clima;
+                document.getElementById('mejorEpoca').value = destino.mejorEpoca;
+                document.getElementById('actividades').value = destino.actividades.join(', ');
+            } else {
+                title.textContent = 'Nuevo Destino';
+                form.reset();
+                document.getElementById('destinoId').value = '';
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function cerrarModal() {
+            document.getElementById('destinoModal').style.display = 'none';
+        }
+
+        async function guardarDestino(event) {
+            event.preventDefault();
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                descripcion: document.getElementById('descripcion').value,
+                region: document.getElementById('region').value,
+                imagen: document.getElementById('imagen').value,
+                clima: document.getElementById('clima').value,
+                mejorEpoca: document.getElementById('mejorEpoca').value,
+                actividades: document.getElementById('actividades').value.split(',').map(a => a.trim())
+            };
+
+            const id = document.getElementById('destinoId').value;
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al guardar el destino');
+                }
+
+                cerrarModal();
+                cargarDestinos();
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarError('Error al guardar el destino');
+            }
+        }
+
+        async function eliminarDestino(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este destino?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el destino');
+                }
+
+                cargarDestinos();
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarError('Error al eliminar el destino');
+            }
+        }
+
+        function editarDestino(id) {
+            const destino = destinos.find(d => d._id === id);
+            if (destino) {
+                abrirModal(destino);
+            }
+        }
+
+        function mostrarError(mensaje) {
+            alert(mensaje);
+        }
+
+        // Event listeners
+        document.getElementById('destinoForm').addEventListener('submit', guardarDestino);
+        window.onclick = function(event) {
+            const modal = document.getElementById('destinoModal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+    </script>
+</body>
+</html> 
